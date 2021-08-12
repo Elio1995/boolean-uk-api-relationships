@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
+}
+
+model Doctor {
+ id  Int @id @default(autoincrement())
+ firstName String
+ lastName String
+ specialty String
+ appointments Appointment[]
+}
+
+model Appointment {
+id  Int @id @default(autoincrement()) 
+practiceName String
+date DateTime
+reason String
+doctorId Int
+doctor  Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
