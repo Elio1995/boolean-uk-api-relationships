@@ -25,4 +25,16 @@ const createOneDoctor = async (req, res) => {
     res.json({ error });
   }
 };
-module.exports = { getAllDoctors, getDoctorById, createOneDoctor };
+
+const deleteDoctorById = async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  const deletedDoctor = await doctor.delete({ where: { id } });
+  res.json({ data: deletedDoctor });
+};
+module.exports = {
+  getAllDoctors,
+  getDoctorById,
+  createOneDoctor,
+  deleteDoctorById,
+};
