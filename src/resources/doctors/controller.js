@@ -1,4 +1,4 @@
-const { doctor } = require("../../../utils/dbClient");
+const { doctor, appointment } = require("../../../utils/dbClient");
 
 const getAllDoctors = async (req, res) => {
   const allDoctors = await doctor.findMany();
@@ -14,6 +14,31 @@ const getDoctorById = async (req, res) => {
     },
   });
   res.json({ data: oneDoctorById });
+};
+
+const doctorAppointments = async (req, res) => {
+  const { id } = req.params;
+
+  const someDoctorAppointments = await appointment.findMany({
+    where: {
+      doctorId: parseInt(id),
+    },
+    include: {
+      doctor: true,
+    },
+  });
+  res.json({ doctorAppointments: someDoctorAppointments });
+};
+
+const doctorSpeciality = async (req, res) => {
+  const speciality = req.params.speciality;
+
+  const DoctorBySpeciality = await doctor.findMany({
+    where: {
+      specialty: speciality,
+    },
+  });
+  res.json({ DoctorBySpeciality: DoctorBySpeciality });
 };
 
 const createOneDoctor = async (req, res) => {
@@ -32,9 +57,12 @@ const deleteDoctorById = async (req, res) => {
   const deletedDoctor = await doctor.delete({ where: { id } });
   res.json({ data: deletedDoctor });
 };
+
 module.exports = {
   getAllDoctors,
   getDoctorById,
   createOneDoctor,
   deleteDoctorById,
+  doctorAppointments,
+  doctorSpeciality,
 };
